@@ -1,6 +1,6 @@
 export default {
-  title: 'Next Template',
-  description: 'Next Template',
+  title: 'Save Form data in Google Sheets in Next JS',
+  description: 'Save Form data in Google Sheets in Next JS',
   twitter: {
     cardType: 'summary_large_image',
   },
@@ -8,14 +8,6 @@ export default {
     type: 'website',
     locale: 'en_IN',
     url: 'mridul.tech',
-    site_name: 'Next Template',
-    // images: [
-    //     {
-    //         url: "",
-    //         width: 300,
-    //         height: 300,
-    //         alt: "Next Template",
-    //     }
-    // ],
+    site_name: 'mridul.tech',
   },
 };
