@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { GoogleSpreadsheet } from 'google-spreadsheet';
 
 // Config variables
-const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
-const SHEET_ID = process.env.SHEET_ID;
-const GOOGLE_CLIENT_EMAIL = process.env.GOOGLE_CLIENT_EMAIL;
-const GOOGLE_SERVICE_PRIVATE_KEY = process.env.GOOGLE_SERVICE_PRIVATE_KEY;
+const SPREADSHEET_ID = process.env.NEXT_PUBLIC_SPREADSHEET_ID;
+const SHEET_ID = process.env.NEXT_PUBLIC_SHEET_ID;
+const GOOGLE_CLIENT_EMAIL = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_EMAIL;
+const GOOGLE_SERVICE_PRIVATE_KEY =
+  process.env.NEXT_PUBLIC_GOOGLE_SERVICE_PRIVATE_KEY;
 
 const ContactForm = () => {
   const [form, setForm] = useState({
@@ -19,8 +20,6 @@ const ContactForm = () => {
 
   const appendSpreadsheet = async (row) => {
     try {
-      setLoading(true);
-
       await doc.useServiceAccountAuth({
         client_email: GOOGLE_CLIENT_EMAIL,
         private_key: GOOGLE_SERVICE_PRIVATE_KEY.replace(/\\n/g, '\n'),
@@ -32,16 +31,13 @@ const ContactForm = () => {
       await sheet.addRow(row);
 
       setSubmicSuccess(true);
-      setLoading(false);
     } catch (e) {
-      setLoading(false);
       console.error('Error: ', e);
     }
   };
 
   const submitForm = (e) => {
     e.preventDefault();
-    setSubmitted(true);
 
     if (
       form.name !== '' &&
