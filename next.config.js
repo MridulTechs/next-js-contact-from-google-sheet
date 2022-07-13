@@ -1,26 +1,14 @@
-const path = require('path');
-require('dotenv').config();
-
 module.exports = {
-  env: {},
-  publicRuntimeConfig: {},
-  images: {
-    formats: ['image/avif', 'image/webp'],
-    domains: ['localhost', 'res.cloudinary.com'],
-  },
-
-  exportPathMap: function () {
-    return {
-      '/locales/de-DE/summer-dress-f': {
-        page: '/locales/[locale]/[slug]',
-        query: { locale: 'de-DE', slug: 'summer-dress-f' },
-      },
-    };
-  },
-
-  webpack: (config) => {
+  webpack: (config, { isServer }) => {
     config.resolve.alias['components'] = path.join(__dirname, 'components');
     config.resolve.alias['public'] = path.join(__dirname, 'public');
+
+    if (!isServer) {
+      config.resolve.fallback.fs = false;
+      config.resolve.fallback.tls = false;
+      config.resolve.fallback.net = false;
+      config.resolve.fallback.child_process = false;
+    }
 
     return config;
   },

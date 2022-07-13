@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .form-field-contact {
+    @apply rounded-md mt-1 block w-full shadow-sm focus:shadow-md p-2 border-[3px]  transition-all duration-200;
+  }
+}
+
 * {
   scroll-behavior: smooth;
   scrollbar-width: thin;

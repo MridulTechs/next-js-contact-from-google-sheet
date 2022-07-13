@@ -1,110 +1,124 @@
-import { NextSeo } from 'next-seo';
-import { IoPauseOutline } from 'react-icons/io5';
+import React, { useState } from 'react';
+import { GoogleSpreadsheet } from 'google-spreadsheet';
 
-export default function Home() {
-  const SEO = {
-    title: 'Next JS Template',
-    description: 'Next JS Template with Tailwind CSS and React Icons',
+// Config variables
+const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
+const SHEET_ID = process.env.SHEET_ID;
+const GOOGLE_CLIENT_EMAIL = process.env.GOOGLE_CLIENT_EMAIL;
+const GOOGLE_SERVICE_PRIVATE_KEY = process.env.GOOGLE_SERVICE_PRIVATE_KEY;
 
-    openGraph: {
-      title: 'Next JS Template',
-      description: 'Next JS Template with Tailwind CSS and React Icons',
-      type: 'website',
-      locale: 'en_IN',
-      url: 'mridul.tech',
-      site_name: 'Next JS Template',
-    },
+const ContactForm = () => {
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    topic: '',
+    description: '',
+  });
+
+  const doc = new GoogleSpreadsheet(SPREADSHEET_ID);
+
+  const appendSpreadsheet = async (row) => {
+    try {
+      setLoading(true);
+
+      await doc.useServiceAccountAuth({
+        client_email: GOOGLE_CLIENT_EMAIL,
+        private_key: GOOGLE_SERVICE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+      });
+      // loads document properties and worksheets
+      await doc.loadInfo();
+
+      const sheet = doc.sheetsById[SHEET_ID];
+      await sheet.addRow(row);
+
+      setSubmicSuccess(true);
+      setLoading(false);
+    } catch (e) {
+      setLoading(false);
+      console.error('Error: ', e);
+    }
+  };
+
+  const submitForm = (e) => {
+    e.preventDefault();
+    setSubmitted(true);
+
+    if (
+      form.name !== '' &&
+      form.email !== '' &&
+      form.topic !== '' &&
+      form.description !== ''
+    ) {
+      const newRow = {
+        FullName: form.name,
+        Email: form.email,
+        Topic: form.topic,
+        Description: form.description,
+      };
+
+      appendSpreadsheet(newRow);
+    }
+  };
+
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <NextSeo {...SEO} />
+    <form className="space-y-3 max-w-lg mx-auto p-5" onSubmit={submitForm}>
+      <p className="font-semibold text-2xl text-center">Contact Form</p>
+      <label className="block">
+        <span className="text-gray-700 font-semibold">Full Name</span>
+        <input
+          name="name"
+          type="text"
+          className="form-input form-field-contact"
+          placeholder="Full Name"
+          onChange={handleChange}
+        />
+      </label>
+      <label className="block">
+        <span className="text-gray-700 font-semibold">Email</span>
+        <input
+          name="email"
+          type="email"
+          className="form-input form-field-contact"
+          placeholder="Email"
+          onChange={handleChange}
+        />
+      </label>
+      <label className="block">
+        <span className="text-gray-700 font-semibold">Topic</span>
+        <input
+          name="topic"
+          type="text"
+          className="form-input form-field-contact"
+          placeholder="Topic"
+          onChange={handleChange}
+        />
+      </label>
+      <label className="block">
+        <span className="text-gray-700 font-semibold">Description</span>
+        <textarea
+          name="description"
+          className="form-textarea form-field-contact"
+          rows="3"
+          placeholder="Description"
+          onChange={handleChange}
+        />
+      </label>
 
-      <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
-        <h1 className="text-5xl font-bold">
-          <a className="text-blue-600" href="https://nextjs.org">
-            Next.js
-          </a>{' '}
-          Template Home Page!
-        </h1>
-
-        <p className="mt-5 text-2xl">
-          Get started by editing{' '}
-          <code className="p-3 font-mono text-lg bg-gray-100 rounded-md">
-            pages/index.js
-          </code>
-        </p>
-
-        <div className="flex flex-wrap items-center justify-around max-w-4xl mt-6 sm:w-full">
-          <a
-            href="https://nextjs.org/docs"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Documentation &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Find in-depth information about Next.js features and API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Learn &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Learn about Next.js in an interactive course with quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Examples &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Discover and deploy boilerplate example Next.js projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Deploy &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className="p-3 flex justify-center items-center gap-1 flex-col sm:flex-row bg-white">
-        <span className="flex items-center">
-          Template by{' '}
-          <a
-            className="ml-1 font-semibold"
-            href="https://www.mridul.tech/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Mridul
-          </a>
-          <span className="px-3 ml-1">
-            <IoPauseOutline size={28} />
-          </span>
-        </span>
-        <span>
-          Made with ❤ {'& '}
-          <a
-            className="ml-1 font-semibold"
-            href="https://github.com/Mridul2820/next-template"
-            target="_blank"
-            rel="noreferrer"
-          >
-            {'<Code/>'}
-          </a>
-        </span>
-      </footer>
-    </div>
+      <button
+        className="bg-green-200 px-3 py-1 font-semibold shadow-md rounded-md"
+        type="submit"
+      >
+        Send Message
+      </button>
+    </form>
   );
-}
+};
+
+export default ContactForm;
