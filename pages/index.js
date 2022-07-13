@@ -29,8 +29,6 @@ const ContactForm = () => {
 
       const sheet = doc.sheetsById[SHEET_ID];
       await sheet.addRow(row);
-
-      setSubmicSuccess(true);
     } catch (e) {
       console.error('Error: ', e);
     }
