@@ -63,7 +63,10 @@ const ContactForm = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen">
-      <form className="space-y-3 max-w-lg mx-auto p-5" onSubmit={submitForm}>
+      <form
+        className="space-y-3 w-full max-w-lg mx-auto p-5"
+        onSubmit={submitForm}
+      >
         <p className="font-semibold text-2xl text-center">Contact Form</p>
         <label className="block">
           <span className="text-gray-700 font-semibold">Full Name</span>
