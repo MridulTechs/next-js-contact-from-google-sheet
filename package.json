@@ -9,6 +9,7 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "dayjs": "^1.11.7",
     "dotenv": "^10.0.0",
     "google-spreadsheet": "^3.3.0",
     "lodash": "^4.17.21",
