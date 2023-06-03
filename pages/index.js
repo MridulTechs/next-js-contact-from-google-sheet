@@ -14,7 +14,7 @@ const GOOGLE_SERVICE_PRIVATE_KEY =
 
 const ContactForm = () => {
   const [loading, setLoading] = useState(false);
-  const [alert, setAlert] = useState(true);
+  const [alert, setAlert] = useState(false);
   const [form, setForm] = useState({
     name: '',
     email: '',
