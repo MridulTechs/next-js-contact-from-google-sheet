@@ -64,7 +64,7 @@ const ContactForm = () => {
         Email: form.email,
         Topic: form.topic,
         Description: form.description,
-        Date: dayjs().format('DD MMMM YYYY HH:mm:ss A'),
+        Date: dayjs().format('DD MMMM YYYY hh:mm:ss A'),
       };
       appendSpreadsheet(newRow);
     }
